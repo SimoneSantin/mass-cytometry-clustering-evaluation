@@ -8,11 +8,11 @@
 
 # Risorse per OGNI SINGOLO JOB nell'array:
 # Un nodo, 4 core. (Adattato da 8ppn a 4ppn, più comune per i nodi, ma puoi lasciare 8 se preferisci)
-#PBS -l nodes=1:ppn=8 
+#PBS -l nodes=1:ppn=4 
 
 # WALLTIME RIDOTTO: Tempo stimato per UN SOLO esperimento (es. 45 minuti).
 # Non è più il tempo totale, ma il tempo massimo per la singola run più lunga.
-#PBS -l walltime=02:00:00 
+#PBS -l walltime=00:45:00 
 # Memoria per UN SINGOLO esperimento (mantenuta alta per sicurezza)
 #PBS -l mem=64gb 
 
@@ -43,7 +43,7 @@ cp $PBS_O_WORKDIR/datasets/human_blood_mass_cytometry_batch1.csv $TMPDIR/
 
 cp $PBS_O_WORKDIR/datasets/human_blood_mass_cytometry_batch1_metadata.csv $TMPDIR/
 
-cp $PBS_O_WORKDIR/kmeans.py $TMPDIR/ # USA IL NUOVO NOME DELLO SCRIPT
+cp $PBS_O_WORKDIR/run_flowsom.py $TMPDIR/ # USA IL NUOVO NOME DELLO SCRIPT
 
 
 # Vai alla directory temporanea per eseguire lo script
@@ -56,12 +56,12 @@ TASK_ID=$PBS_ARRAYID
 echo "L'indice del task corrente è: $TASK_ID" 
 
 # 2. Esegui lo script Python, usando la variabile locale $TASK_ID
-python kmeans.py $TASK_ID
+python run_flowgrid.py $TASK_ID
 echo "step 8: Esecuzione Python terminata"
 
 
 # --- 4. Copia Risultati (USA LA NUOVA VARIABILE TASK_ID) ---
-cp kmeans_results_${TASK_ID}.csv $VSC_HOME/kmeans_array_results_${TASK_ID}.csv
+cp flowgrid_results_${TASK_ID}.csv $VSC_HOME/flowgrid_array_results_${TASK_ID}.csv
 echo "step 9: Risultati copiati"
 
 

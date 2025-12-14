@@ -1,7 +1,7 @@
 import sys
 import pandas as pd
 import numpy as np
-from sklearn.cluster import KMeans
+from sklearn.cluster import HDBSCAN
 from sklearn.metrics import silhouette_score, adjusted_rand_score, normalized_mutual_info_score
 import time
 
@@ -49,12 +49,19 @@ print(f"Job {JOB_INDEX} (Size: {size}, Run: {run}),first index selected: {start}
 start_time = time.time()
 try:
    
-    kmeans = KMeans(n_clusters=3, random_state=42, n_init='auto') 
-    labels = kmeans.fit_predict(X)
+    clusterer = HDBSCAN(
+        min_cluster_size=5,
+        min_samples=15,
+        metric="euclidean",
+        )
+                
+    labels = clusterer.fit_predict(X)
 
     ari = adjusted_rand_score(Y, labels)
     nmi = normalized_mutual_info_score(Y, labels)
     sil = silhouette_score(X, labels)
+ 
+
 
     exec_time = time.time() - start_time
 
@@ -80,9 +87,7 @@ except Exception as e:
         "num_clusters": np.nan, "time_sec": np.nan, "error": str(e)
     })
 
-
 df = pd.DataFrame(results)
 
-df.to_csv(f"kmeans_results_{JOB_INDEX}.csv", index=False)
-
-print(f"\nSaved results for Job {JOB_INDEX} to kmeans_results_{JOB_INDEX}.csv")
+df.to_csv(f"hdbscan_results_{JOB_INDEX}.csv", index=False)
+print(f"\nSaved results for Job {JOB_INDEX} to hdbscan_results_{JOB_INDEX}.csv")

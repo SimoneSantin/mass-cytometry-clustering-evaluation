@@ -14,7 +14,7 @@
 # Non è più il tempo totale, ma il tempo massimo per la singola run più lunga.
 #PBS -l walltime=00:45:00 
 # Memoria per UN SINGOLO esperimento (mantenuta alta per sicurezza)
-#PBS -l mem=32gb 
+#PBS -l mem=64gb 
 
 
 # --- 2. Caricamento Moduli Software ---
@@ -43,7 +43,7 @@ cp $PBS_O_WORKDIR/datasets/human_blood_mass_cytometry_batch1.csv $TMPDIR/
 
 cp $PBS_O_WORKDIR/datasets/human_blood_mass_cytometry_batch1_metadata.csv $TMPDIR/
 
-cp $PBS_O_WORKDIR/agglomerative.py $TMPDIR/ # USA IL NUOVO NOME DELLO SCRIPT
+cp $PBS_O_WORKDIR/run_phenograph.py $TMPDIR/ # USA IL NUOVO NOME DELLO SCRIPT
 
 
 # Vai alla directory temporanea per eseguire lo script
@@ -56,12 +56,12 @@ TASK_ID=$PBS_ARRAYID
 echo "L'indice del task corrente è: $TASK_ID" 
 
 # 2. Esegui lo script Python, usando la variabile locale $TASK_ID
-python agglomerative.py $TASK_ID
+python run_phenograph.py $TASK_ID
 echo "step 8: Esecuzione Python terminata"
 
 
 # --- 4. Copia Risultati (USA LA NUOVA VARIABILE TASK_ID) ---
-cp agglomerative_results_${TASK_ID}.csv $VSC_HOME/agglomerative_array_results_${TASK_ID}.csv
+cp phenograph_results_${TASK_ID}.csv $VSC_HOME/phenograph_array_results_${TASK_ID}.csv
 echo "step 9: Risultati copiati"
 
 

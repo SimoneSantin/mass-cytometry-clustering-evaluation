@@ -1,7 +1,7 @@
 import sys
 import pandas as pd
 import numpy as np
-from sklearn.cluster import KMeans
+from FlowGrid import FlowGrid
 from sklearn.metrics import silhouette_score, adjusted_rand_score, normalized_mutual_info_score
 import time
 
@@ -49,12 +49,22 @@ print(f"Job {JOB_INDEX} (Size: {size}, Run: {run}),first index selected: {start}
 start_time = time.time()
 try:
    
-    kmeans = KMeans(n_clusters=3, random_state=42, n_init='auto') 
-    labels = kmeans.fit_predict(X)
+    fg = FlowGrid(
+            original_data=X,  
+            MinDenB=5,
+            bin_n=3,
+            eps=2.0,
+            MinDenC=5
+        )
+
+                    
+    labels = fg.clustering()
 
     ari = adjusted_rand_score(Y, labels)
     nmi = normalized_mutual_info_score(Y, labels)
     sil = silhouette_score(X, labels)
+ 
+
 
     exec_time = time.time() - start_time
 
@@ -80,9 +90,7 @@ except Exception as e:
         "num_clusters": np.nan, "time_sec": np.nan, "error": str(e)
     })
 
-
 df = pd.DataFrame(results)
+df.to_csv(f"flowgrid_results_{JOB_INDEX}.csv", index=False)
 
-df.to_csv(f"kmeans_results_{JOB_INDEX}.csv", index=False)
-
-print(f"\nSaved results for Job {JOB_INDEX} to kmeans_results_{JOB_INDEX}.csv")
+print(f"\nSaved results for Job {JOB_INDEX} to flowgrid_results_{JOB_INDEX}.csv")

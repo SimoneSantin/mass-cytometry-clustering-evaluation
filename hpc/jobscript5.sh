@@ -43,7 +43,7 @@ cp $PBS_O_WORKDIR/datasets/human_blood_mass_cytometry_batch1.csv $TMPDIR/
 
 cp $PBS_O_WORKDIR/datasets/human_blood_mass_cytometry_batch1_metadata.csv $TMPDIR/
 
-cp $PBS_O_WORKDIR/kmeans.py $TMPDIR/ # USA IL NUOVO NOME DELLO SCRIPT
+cp $PBS_O_WORKDIR/hdbscan.py $TMPDIR/ # USA IL NUOVO NOME DELLO SCRIPT
 
 
 # Vai alla directory temporanea per eseguire lo script
@@ -56,12 +56,12 @@ TASK_ID=$PBS_ARRAYID
 echo "L'indice del task corrente è: $TASK_ID" 
 
 # 2. Esegui lo script Python, usando la variabile locale $TASK_ID
-python kmeans.py $TASK_ID
+python hdbscan.py $TASK_ID
 echo "step 8: Esecuzione Python terminata"
 
 
 # --- 4. Copia Risultati (USA LA NUOVA VARIABILE TASK_ID) ---
-cp kmeans_results_${TASK_ID}.csv $VSC_HOME/kmeans_array_results_${TASK_ID}.csv
+cp hdbscan_results_${TASK_ID}.csv $VSC_HOME/hdbscan_array_results_${TASK_ID}.csv
 echo "step 9: Risultati copiati"
 
 
